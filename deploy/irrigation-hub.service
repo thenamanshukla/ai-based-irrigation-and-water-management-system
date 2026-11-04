@@ -1,0 +1,18 @@
+# systemd unit: starts the hub on boot and restarts it if it stops.
+# Install on the Pi:
+#   sudo cp deploy/irrigation-hub.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now irrigation-hub
+#   journalctl -u irrigation-hub -f        # live log
+[Unit]
+Description=Irrigation decision hub
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/irrigation_brain
+ExecStart=/usr/bin/python3 -m irrigation.service --settings settings.json
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
