@@ -3,9 +3,8 @@
 The decision engine for AI based irrigation and water management. It runs on the Raspberry Pi 5,
 reads real packets from Arduino B over USB serial, and makes decisions on the Pi's own clock.
 
-**No sample data is shipped.** The database is created empty on first start and is filled only by
-packets received from the field node. The simulator exists only inside `tests/` and is never
-imported by the service.
+**No sample or test data is included.** The database is created empty on first start and is filled
+only by packets received from the field node.
 
 ## First start on the Pi
 
@@ -77,6 +76,11 @@ saved in the database and survives restarts.
 `readings`, `decisions`, `commands`, `alerts`, `rejected`, `state`. Every write is committed immediately,
 so a power cut loses at most the packet in flight.
 
+## Arduino code
+
+The field node and gateway sketches are in `firmware/`; see `firmware/README.md` for libraries,
+wiring checks and the first run checklist. `tools/find_soil_registers.py` identifies the soil probe registers.
+
 ## Files
 
 | File | Role |
@@ -89,11 +93,6 @@ so a power cut loses at most the packet in flight.
 | `irrigation/store.py` | SQLite access |
 | `irrigation/cli.py` | Farmer and developer commands |
 | `irrigation/config.py` | Settings and defaults |
-| `tests/` | 27 tests, including a 45 day season through the real hub and a real service process |
-
-```bash
-python -m unittest discover -s . -p "test_*.py"
-```
 
 ## Before trusting it in the field
 
