@@ -6,6 +6,7 @@
 
 Requires:  pip install pyserial   (only for serial mode)
 """
+from __future__ import annotations
 import argparse
 import logging
 import signal

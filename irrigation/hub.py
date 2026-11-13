@@ -3,6 +3,7 @@ watches tank drawdown for leaks and clogs, and sends valve commands to the field
 
 Nothing here generates data. If no packets arrive, the database stays empty and no
 decision is made."""
+from __future__ import annotations
 import json
 import logging
 import os

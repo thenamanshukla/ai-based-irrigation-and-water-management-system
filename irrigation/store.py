@@ -1,4 +1,5 @@
 """SQLite storage. The database starts empty and is filled only by real packets."""
+from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
@@ -24,10 +25,11 @@ FIELDS = ["ts", "node", "node_ts", "moisture", "soil_temp", "ec", "ph", "n", "p"
 
 
 class Store:
-    def __init__(self, path: str):
+    def __init__(self, path: str, shared: bool = False):
+        """shared=True lets several threads use the connection; the caller must serialise access."""
         if path != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(path)
+        self.db = sqlite3.connect(path, check_same_thread=not shared, timeout=5)
         self.db.executescript(SCHEMA)
 
     # -------- writes (each commits, so nothing is lost on power cut)

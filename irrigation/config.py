@@ -1,4 +1,5 @@
 """All tunable settings in one place. Edit settings.json to override any value."""
+from __future__ import annotations
 from dataclasses import dataclass, field, asdict
 import json
 from pathlib import Path
@@ -78,6 +79,9 @@ class Service:
     log_path: str = "data/hub.log"
     serial_port: str = "/dev/ttyACM0"      # Arduino B gateway
     baud: int = 115200
+    api_port: int = 8080                   # phone app connects to http://<pi address>:8080
+    app_pin: str = ""                      # if set, the app must send this PIN to water or change settings
+    farm_name: str = "My farm"
 
 
 @dataclass

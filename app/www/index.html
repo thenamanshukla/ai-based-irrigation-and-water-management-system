@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16384C">
+  <title>Irrigation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="farm" id="farmName">Irrigation</div>
+    <div class="link" id="linkState"><span id="linkText"></span></div>
+  </header>
+
+  <main id="main">
+    <!-- TODAY -->
+    <section class="view" id="view-home" data-view="home">
+      <div id="homeBody"></div>
+    </section>
+
+    <!-- TRENDS -->
+    <section class="view" id="view-trends" data-view="trends" hidden>
+      <div id="trendsBody"></div>
+    </section>
+
+    <!-- WATER -->
+    <section class="view" id="view-water" data-view="water" hidden>
+      <div class="card">
+        <h2 data-t="water_title"></h2>
+        <p class="sub" data-t="water_sub"></p>
+        <div class="stepper" role="group" aria-label="minutes">
+          <button class="step" data-step="-5" aria-label="minus 5">−5</button>
+          <div class="stepval"><span id="minVal">15</span><small data-t="minutes"></small></div>
+          <button class="step" data-step="5" aria-label="plus 5">+5</button>
+        </div>
+        <button class="primary" id="waterBtn" data-t="water_btn"></button>
+        <p class="msg" id="waterMsg" role="status"></p>
+        <p class="meta" id="lastWatering"></p>
+      </div>
+      <div class="card">
+        <h2 data-t="pond_title"></h2>
+        <p class="sub" data-t="pond_sub"></p>
+        <label class="field"><input id="pondInput" type="number" inputmode="decimal" min="0" placeholder="120"><span data-t="litres"></span></label>
+        <button class="secondary" id="pondBtn" data-t="pond_btn"></button>
+        <p class="msg" id="pondMsg" role="status"></p>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="view-settings" data-view="settings" hidden>
+      <div class="card">
+        <h2 data-t="settings_hub"></h2>
+        <p class="sub" data-t="settings_hub_sub"></p>
+        <label class="field wide"><input id="hubInput" type="url" inputmode="url" autocapitalize="off" spellcheck="false"></label>
+        <div class="row">
+          <button class="secondary" id="testBtn" data-t="test_conn"></button>
+          <button class="primary small" id="saveHubBtn" data-t="save"></button>
+        </div>
+        <p class="msg" id="hubMsg" role="status"></p>
+      </div>
+      <div class="card">
+        <h2 data-t="language"></h2>
+        <div class="seg" id="langSeg">
+          <button data-lang="en">English</button>
+          <button data-lang="hi">हिन्दी</button>
+        </div>
+      </div>
+      <div class="card">
+        <label class="toggle"><input type="checkbox" id="notifyToggle"><span><b data-t="notify"></b><small data-t="notify_sub"></small></span></label>
+      </div>
+      <div class="card">
+        <h2 data-t="pin"></h2>
+        <label class="field wide"><input id="pinInput" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></label>
+        <button class="secondary" id="savePinBtn" data-t="save"></button>
+      </div>
+      <p class="meta center"><span data-t="version"></span> 1.0</p>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="sections">
+    <button data-tab="home" class="on"><svg viewBox="0 0 24 24"><path d="M12 3c3.5 4.6 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.4 6-11z"/></svg><span data-t="tab_home"></span></button>
+    <button data-tab="trends"><svg viewBox="0 0 24 24"><path d="M3 18l6-7 4 4 8-9"/></svg><span data-t="tab_trends"></span></button>
+    <button data-tab="water"><svg viewBox="0 0 24 24"><path d="M4 10h10a3 3 0 0 1 3 3v2M17 15v3M15 20h4M4 7v6"/></svg><span data-t="tab_water"></span></button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span data-t="tab_settings"></span></button>
+  </nav>
+
+  <div class="sheet" id="pinSheet" hidden>
+    <div class="sheet-card">
+      <h2 data-t="pin_prompt"></h2>
+      <label class="field wide"><input id="pinAsk" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></label>
+      <p class="msg" id="pinAskMsg" role="status"></p>
+      <div class="row"><button class="secondary" id="pinCancel" data-t="cancel"></button><button class="primary small" id="pinOk">OK</button></div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

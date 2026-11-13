@@ -1,4 +1,5 @@
 """Daily irrigation decision: combines Eqs. (1) to (8) into one plan."""
+from __future__ import annotations
 from dataclasses import dataclass, asdict, field
 from . import models as M
 

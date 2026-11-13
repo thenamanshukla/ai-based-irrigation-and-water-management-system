@@ -6,6 +6,7 @@
     python -m irrigation.cli set-pond 120        # litres currently in the pond
     python -m irrigation.cli water 20            # request 20 minutes now (safety rules still apply)
 """
+from __future__ import annotations
 import argparse
 import json
 import sys

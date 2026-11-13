@@ -7,12 +7,35 @@
     "baud": 115200,
     "db_path": "data/irrigation.sqlite",
     "status_path": "data/status.json",
-    "log_path": "data/hub.log"
+    "log_path": "data/hub.log",
+    "api_port": 8080,
+    "app_pin": "",
+    "farm_name": "My farm"
   },
-  "site": {"latitude_deg": 24.8},
-  "tank": {"capacity_l": 20, "depth_m": 0.30, "floor_above_emitters_m": 1.0, "sensor_to_floor_m": 0.30, "reserve_l": 2},
-  "emitters": {"count": 8, "k_lph": 0.63, "x": 0.5, "efficiency": 0.9},
-  "zone": {"area_m2": 0.72},
-  "soil": {"theta_fc": 0.30, "theta_wp": 0.15},
-  "rules": {"max_valve_min": 90}
+  "site": {
+    "latitude_deg": 24.8
+  },
+  "tank": {
+    "capacity_l": 20,
+    "depth_m": 0.3,
+    "floor_above_emitters_m": 1.0,
+    "sensor_to_floor_m": 0.3,
+    "reserve_l": 2
+  },
+  "emitters": {
+    "count": 8,
+    "k_lph": 0.63,
+    "x": 0.5,
+    "efficiency": 0.9
+  },
+  "zone": {
+    "area_m2": 0.72
+  },
+  "soil": {
+    "theta_fc": 0.3,
+    "theta_wp": 0.15
+  },
+  "rules": {
+    "max_valve_min": 90
+  }
 }

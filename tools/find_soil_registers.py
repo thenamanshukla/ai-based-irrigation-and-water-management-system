@@ -9,6 +9,7 @@ Prints every register 0x0000 to 0x0030 that answers. Wet the soil around the pro
 again: the register that changes most is moisture. Copy the addresses into
 firmware/field_node/field_node.ino (REG_MOIST ... REG_K, SOIL_ADDR, SOIL_BAUD).
 """
+from __future__ import annotations
 import argparse
 import struct
 import time

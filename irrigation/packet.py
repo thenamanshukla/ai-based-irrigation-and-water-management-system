@@ -9,6 +9,7 @@ from sensor to water surface in cm, temperatures in deg C, rain and valve 0 or 1
 "node", "ts", "soil_temp", "ec", "ph", "n", "p", "k" are optional; the hub records its own
 receive time as the authoritative timestamp.
 """
+from __future__ import annotations
 import json
 
 REQUIRED = {

@@ -1,0 +1,16 @@
+# systemd unit: phone app API, starts on boot.
+#   sudo cp deploy/irrigation-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now irrigation-api
+[Unit]
+Description=Irrigation phone app API
+After=network.target irrigation-hub.service
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/irrigation_brain
+ExecStart=/usr/bin/python3 -m irrigation.api --settings settings.json
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
