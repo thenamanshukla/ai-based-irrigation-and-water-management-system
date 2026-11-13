@@ -76,6 +76,20 @@ saved in the database and survives restarts.
 `readings`, `decisions`, `commands`, `alerts`, `rejected`, `state`. Every write is committed immediately,
 so a power cut loses at most the packet in flight.
 
+## Where Arm is used
+
+| Part | Chip | Arm | Role |
+|---|---|---|---|
+| Raspberry Pi 5 hub | Broadcom BCM2712, 4x Arm Cortex-A76 | Yes | Hub, water models, leak and clog detection, SQLite, phone API; Llama assistant via ExecuTorch on the Arm CPU (planned) |
+| Android phone app | Phone SoC with Arm Cortex-A cores | Yes | Farmer's screen: plan, tank, soil, alerts, manual watering (`app/`) |
+| Development Mac | Apple M series | Yes | Builds the app; emulator uses the arm64 system image (not part of the deployed system) |
+| IMX500 AI Camera | Sony sensor with on-chip AI | Partly | Runs the vision model in the sensor; the Pi's Arm CPU reads the result |
+| Arduino UNO A and B | ATmega328P (AVR) | No | Field sensors, radio, valve failsafe. UNO R4 (Arm Cortex-M4) is a drop-in option |
+
+## Phone app
+
+See `app/README.md` for building the Android app and connecting it to the hub.
+
 ## Arduino code
 
 The field node and gateway sketches are in `firmware/`; see `firmware/README.md` for libraries,
