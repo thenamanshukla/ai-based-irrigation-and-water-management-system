@@ -10,6 +10,7 @@ Endpoints (all JSON):
     GET  /api/alerts?n=30             alerts, newest first
     POST /api/water   {"minutes": 15, "pin": "1234"}   manual watering request (safety rules still apply)
     POST /api/pond    {"litres": 120, "pin": "1234"}   pond level entered by the farmer
+    POST /api/ask     {"question": "...", "lang": "hi"}  Llama 3.2 1B on the Pi's Arm CPU (ExecuTorch)
 
 Only the standard library is used, so nothing extra needs installing on the Pi.
 """
@@ -23,7 +24,7 @@ from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 
-from . import config, models as M
+from . import assistant, config, models as M
 from .hub import Hub, TS
 from .store import Store
 
@@ -41,7 +42,8 @@ class Api:
     # ------------------------------------------------------------ reads
     def health(self):
         return {"ok": True, "name": self.cfg.service.farm_name, "version": VERSION,
-                "pin_required": bool(self.cfg.service.app_pin), "time": datetime.now().strftime(TS)}
+                "pin_required": bool(self.cfg.service.app_pin), "time": datetime.now().strftime(TS),
+                "assistant": assistant.installed(self.cfg.service.llm_dir)}
 
     def status(self):
         s = self.hub.status()
@@ -111,6 +113,21 @@ class Api:
         return 200, {"ok": True, "pond_l": litres}
 
 
+    def ask(self, body):
+        q = str(body.get("question", "")).strip()
+        if not q or len(q) > 500:
+            return 400, {"ok": False, "error": "question_required"}
+        sv = self.cfg.service
+        if not assistant.installed(sv.llm_dir):
+            return 503, {"ok": False, "error": "assistant_not_installed"}
+        with self.lock:                          # read the facts, then free the database for other requests
+            fact_text = assistant.facts(self.hub.status(), self.cfg.tank.capacity_l)
+        lang = "hi" if body.get("lang") == "hi" else "en"
+        out = assistant.ask(q, lang, fact_text, sv.llm_dir, sv.llm_threads, sv.llm_max_new_tokens)
+        log.info("ask (%s) %.1fs %s", lang, out["seconds"], out.get("speed"))
+        return 200, dict(ok=True, **out)
+
+
 def make_handler(api: Api):
     class Handler(BaseHTTPRequestHandler):
         server_version = "IrrigationHub/" + VERSION
@@ -135,6 +152,8 @@ def make_handler(api: Api):
                 self._get()
 
         def do_POST(self):
+            if urlparse(self.path).path == "/api/ask":    # slow; must not hold the database lock
+                return self._post()
             with api.lock:
                 self._post()
 
@@ -175,6 +194,8 @@ def make_handler(api: Api):
                     return self._send(*api.water(body))
                 if u.path == "/api/pond":
                     return self._send(*api.pond(body))
+                if u.path == "/api/ask":
+                    return self._send(*api.ask(body))
                 self._send(404, {"ok": False, "error": "not_found"})
             except Exception as e:
                 log.exception("POST %s failed", u.path)

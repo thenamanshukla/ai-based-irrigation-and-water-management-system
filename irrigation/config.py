@@ -82,6 +82,9 @@ class Service:
     api_port: int = 8080                   # phone app connects to http://<pi address>:8080
     app_pin: str = ""                      # if set, the app must send this PIN to water or change settings
     farm_name: str = "My farm"
+    llm_dir: str = "/home/pi/llama"        # llama_main, its libraries, model.pte and tokenizer.model
+    llm_threads: int = 4                   # Cortex-A76 cores used for Llama
+    llm_max_new_tokens: int = 160
 
 
 @dataclass

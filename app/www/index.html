@@ -47,6 +47,23 @@
       </div>
     </section>
 
+    <!-- ASK -->
+    <section class="view" id="view-ask" data-view="ask" hidden>
+      <div class="card">
+        <h2 data-t="ask_title"></h2>
+        <p class="sub" data-t="ask_sub"></p>
+        <textarea id="askInput" class="ask" rows="3" maxlength="500"></textarea>
+        <div class="sugg" id="askSugg"></div>
+        <button class="primary" id="askBtn" data-t="ask_btn"></button>
+        <p class="msg" id="askMsg" role="status"></p>
+      </div>
+      <div class="card" id="askOut" hidden>
+        <div class="label" data-t="ask_answer"></div>
+        <p class="answer" id="askAnswer"></p>
+        <p class="meta" id="askMeta"></p>
+      </div>
+    </section>
+
     <!-- SETTINGS -->
     <section class="view" id="view-settings" data-view="settings" hidden>
       <div class="card">
@@ -82,6 +99,7 @@
     <button data-tab="home" class="on"><svg viewBox="0 0 24 24"><path d="M12 3c3.5 4.6 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.4 6-11z"/></svg><span data-t="tab_home"></span></button>
     <button data-tab="trends"><svg viewBox="0 0 24 24"><path d="M3 18l6-7 4 4 8-9"/></svg><span data-t="tab_trends"></span></button>
     <button data-tab="water"><svg viewBox="0 0 24 24"><path d="M4 10h10a3 3 0 0 1 3 3v2M17 15v3M15 20h4M4 7v6"/></svg><span data-t="tab_water"></span></button>
+    <button data-tab="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 9.5h6M9 12.5h4"/></svg><span data-t="tab_ask"></span></button>
     <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span data-t="tab_settings"></span></button>
   </nav>
 

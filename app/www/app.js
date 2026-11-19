@@ -79,12 +79,13 @@
 
   function setLink() {
     const el = $("#linkState");
-    el.classList.toggle("ok", reachable === true && !!(status && status.field_online && status.field));
-    el.classList.toggle("bad", reachable === false || !!(status && !status.field_online));
+    const live = !!(status && status.field_online && status.field && status.field.age_min < 30);
+    el.classList.toggle("ok", reachable === true && live);
+    el.classList.toggle("bad", reachable === false || !!(status && status.field && !live));
     let txt = "";
     if (reachable === false) txt = T("offline_title");
     else if (status && status.field) {
-      txt = (status.field_online ? T("field_online") : T("field_offline")) + ", " + T("updated") + " " + ago(status.field.age_min);
+      txt = (live ? T("field_online") : T("field_offline")) + ", " + T("updated") + " " + ago(status.field.age_min);
     } else if (status) txt = T("no_data");
     $("#linkText").textContent = txt;
   }
@@ -304,6 +305,30 @@
     else setMsg(msgSel, errText(r), "err");
   }
 
+  // ---------------------------------------------------------------- ask (Llama on the hub)
+  function renderAsk() {
+    $("#askSugg").innerHTML = T("ask_examples").map((q) => `<button data-q="${esc(q)}">${esc(q)}</button>`).join("");
+  }
+
+  async function ask() {
+    const q = $("#askInput").value.trim();
+    if (!q) return setMsg("#askMsg", T("ask_empty"), "err");
+    const btn = $("#askBtn");
+    btn.disabled = true;
+    setMsg("#askMsg", T("ask_wait"));
+    let r;
+    try { r = await api("/api/ask", { body: { question: q, lang: S.lang }, timeout: 200000 }); }
+    catch (e) { btn.disabled = false; return setMsg("#askMsg", T("conn_fail") + " " + S.hub, "err"); }
+    btn.disabled = false;
+    if (r.code === 503) return setMsg("#askMsg", T("ask_missing"), "err");
+    if (r.code !== 200 || !r.data.ok) return setMsg("#askMsg", errText(r), "err");
+    setMsg("#askMsg", "");
+    $("#askAnswer").textContent = r.data.answer;
+    const sp = r.data.speed;
+    $("#askMeta").textContent = `${T("ask_meta")} ${fmt(r.data.seconds, 1)} s` + (sp ? `, ${fmt(sp.decode, 1)} ${T("ask_speed")}` : "");
+    $("#askOut").hidden = false;
+  }
+
   // ---------------------------------------------------------------- PIN sheet
   function openPin(msg) {
     $("#pinAsk").value = "";
@@ -343,6 +368,7 @@
     if (name === "home") renderHome();
     if (name === "trends") renderTrends();
     if (name === "water") renderWaterMeta();
+    if (name === "ask") renderAsk();
     if (name === "settings") { $("#hubInput").value = S.hub; $("#pinInput").value = S.pin; $("#notifyToggle").checked = S.notify; }
   }
 
@@ -351,6 +377,7 @@
     if (!t) return;
     if (t.dataset.tab) return show(t.dataset.tab);
     if (t.dataset.go) return show(t.dataset.go);
+    if (t.dataset.q) { $("#askInput").value = t.dataset.q; return ask(); }
     if (t.hasAttribute("data-retry")) { $("#homeBody").innerHTML = ""; return refresh(); }
     if (t.dataset.step) {
       minutes = Math.max(5, Math.min(90, minutes + Number(t.dataset.step)));
@@ -363,6 +390,7 @@
     if (!(minutes >= 1 && minutes <= 90)) return setMsg("#waterMsg", T("err_minutes"), "err");
     guarded("/api/water", { minutes }, "#waterMsg", T("water_sent"));
   });
+  $("#askBtn").addEventListener("click", ask);
   $("#pondBtn").addEventListener("click", () => {
     const v = parseFloat($("#pondInput").value);
     if (!(v >= 0)) return setMsg("#pondMsg", T("err_litres"), "err");

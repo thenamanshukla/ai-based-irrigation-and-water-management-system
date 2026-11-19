@@ -1,6 +1,11 @@
 // Screen text in English and Hindi. Add a language by copying the "en" block.
 window.I18N = {
   en: {
+    tab_ask: "Ask", ask_title: "Ask about your farm", ask_sub: "Answered by Llama running on the hub itself. It uses today's readings and plan, and works without internet.",
+    ask_btn: "Ask", ask_wait: "Thinking on the hub. This can take up to a minute.", ask_answer: "Answer",
+    ask_meta: "Answered on the Raspberry Pi's Arm CPU in", ask_speed: "tokens per second",
+    ask_missing: "The assistant is not installed on the hub yet.", ask_empty: "Type a question first",
+    ask_examples: ["Should I water today?", "How many days will the water last?", "Is there any problem with the pipes?"],
     tab_home: "Today", tab_trends: "Trends", tab_water: "Water", tab_settings: "Settings",
     field_online: "Field online", field_offline: "Field not reporting", updated: "updated",
     min_ago: "min ago", just_now: "just now",
@@ -51,6 +56,11 @@ window.I18N = {
     },
   },
   hi: {
+    tab_ask: "पूछें", ask_title: "अपने खेत के बारे में पूछें", ask_sub: "जवाब हब पर चल रहा Llama देता है। यह आज के डेटा और योजना का उपयोग करता है और बिना इंटरनेट के काम करता है।",
+    ask_btn: "पूछें", ask_wait: "हब सोच रहा है। इसमें एक मिनट तक लग सकता है।", ask_answer: "जवाब",
+    ask_meta: "Raspberry Pi के Arm CPU पर जवाब दिया गया, समय", ask_speed: "टोकन प्रति सेकंड",
+    ask_missing: "हब पर सहायक अभी इंस्टॉल नहीं है।", ask_empty: "पहले सवाल लिखें",
+    ask_examples: ["क्या आज पानी देना है?", "पानी कितने दिन चलेगा?", "क्या पाइप में कोई समस्या है?"],
     tab_home: "आज", tab_trends: "रुझान", tab_water: "सिंचाई", tab_settings: "सेटिंग्स",
     field_online: "खेत जुड़ा है", field_offline: "खेत से डेटा नहीं आ रहा", updated: "अपडेट",
     min_ago: "मिनट पहले", just_now: "अभी",
