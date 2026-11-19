@@ -60,7 +60,22 @@ def facts(status: dict, tank_capacity_l: float) -> str:
     return "\n".join(lines)
 
 
-def prompt(question: str, lang: str, fact_text: str) -> str:
+def key_point(status: dict) -> str:
+    """One plain sentence the model should build its answer on; small models stay accurate this way."""
+    f, d = status.get("field"), status.get("today")
+    if not f:
+        return ("No sensor readings have arrived yet, so the hub cannot decide about watering. "
+                "The farmer should check that the field box has power and its radio is working.")
+    if not d:
+        return "Readings are arriving, but today's plan is not made yet; the hub decides every morning."
+    if d.get("action") == "water":
+        return f"Today the hub plans to water for {d.get('minutes')} minutes."
+    if d.get("action") == "blocked":
+        return "Watering is blocked today for safety: " + "; ".join(d.get("reasons", [])) + "."
+    return "No watering is needed today: " + "; ".join(d.get("reasons", [])) + "."
+
+
+def prompt(question: str, lang: str, fact_text: str, point: str = "") -> str:
     language = "Hindi (Devanagari script)" if lang == "hi" else "simple English"
     system = (
         "You are the assistant of a small farm's drip irrigation system. "
@@ -68,7 +83,8 @@ def prompt(question: str, lang: str, fact_text: str) -> str:
         "Use only the facts below for anything about this farm; never invent numbers. "
         "If a fact is unknown, say so. The hub decides watering and enforces safety; "
         "you cannot open or close the valve, but you can tell the farmer to use the Water tab.\n\n"
-        "Facts from the hub:\n" + fact_text)
+        "Do not repeat yourself. Facts from the hub:\n" + fact_text +
+        ("\n\nMost important: " + point if point else ""))
     return ("<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n" + system +
             "<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n" + question.strip() +
             "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n")
@@ -92,10 +108,10 @@ def _speed(out: str):
         return None
 
 
-def ask(question: str, lang: str, fact_text: str, llm_dir: str, threads: int, max_new: int) -> dict:
+def ask(question: str, lang: str, fact_text: str, llm_dir: str, threads: int, max_new: int, point: str = "") -> dict:
     with _lock:
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
-            f.write(prompt(question, lang, fact_text))
+            f.write(prompt(question, lang, fact_text, point))
             pfile = f.name
         env = dict(os.environ, LD_LIBRARY_PATH=llm_dir + ":" + os.environ.get("LD_LIBRARY_PATH", ""))
         t0 = time.monotonic()

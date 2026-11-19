@@ -121,9 +121,11 @@ class Api:
         if not assistant.installed(sv.llm_dir):
             return 503, {"ok": False, "error": "assistant_not_installed"}
         with self.lock:                          # read the facts, then free the database for other requests
-            fact_text = assistant.facts(self.hub.status(), self.cfg.tank.capacity_l)
+            st = self.hub.status()
+            fact_text = assistant.facts(st, self.cfg.tank.capacity_l)
+            point = assistant.key_point(st)
         lang = "hi" if body.get("lang") == "hi" else "en"
-        out = assistant.ask(q, lang, fact_text, sv.llm_dir, sv.llm_threads, sv.llm_max_new_tokens)
+        out = assistant.ask(q, lang, fact_text, sv.llm_dir, sv.llm_threads, sv.llm_max_new_tokens, point)
         log.info("ask (%s) %.1fs %s", lang, out["seconds"], out.get("speed"))
         return 200, dict(ok=True, **out)
 
@@ -133,9 +135,9 @@ def make_handler(api: Api):
         server_version = "IrrigationHub/" + VERSION
 
         def _send(self, code, obj):
-            data = json.dumps(obj).encode()
+            data = json.dumps(obj, ensure_ascii=False).encode()
             self.send_response(code)
-            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Access-Control-Allow-Origin", "*")        # app runs from its own origin
             self.send_header("Access-Control-Allow-Headers", "Content-Type")
