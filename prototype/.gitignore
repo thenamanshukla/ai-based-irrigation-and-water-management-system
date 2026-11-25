@@ -1,0 +1,7 @@
+data/
+settings.json
+__pycache__/
+*.sqlite*
+*.apk
+*.log
+bench_results.json

@@ -1,0 +1,20 @@
+{
+  "name": "irrigation-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android app for the AI Based Irrigation and Water Management System hub",
+  "scripts": {
+    "android:add": "npx cap add android && node scripts/patch-android.js",
+    "sync": "npx cap sync android && node scripts/patch-android.js",
+    "open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/local-notifications": "8.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0"
+  }
+}

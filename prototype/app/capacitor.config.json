@@ -1,0 +1,10 @@
+{
+  "appId": "in.agri.irrigationhub",
+  "appName": "Irrigation",
+  "webDir": "www",
+  "server": { "androidScheme": "http", "cleartext": true },
+  "android": { "allowMixedContent": true },
+  "plugins": {
+    "LocalNotifications": { "iconColor": "#16384C" }
+  }
+}
