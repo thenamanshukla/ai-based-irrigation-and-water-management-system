@@ -17,6 +17,8 @@
 
 National Institute of Technology Mizoram
 
+**[Demo video](https://drive.google.com/file/d/1VXh8rzRxHOA21tu4lEKKEYOoKbRoDuBf/view?usp=sharing)** · **[Project report](docs/Final_Project_Report.pdf)**
+
 </div>
 
 ---
@@ -214,7 +216,7 @@ Install the APK on the phone and enter `http://<Pi address>:8080` in Settings.
 | | |
 |---|---|
 | Project report | [docs/Final_Project_Report.pdf](docs/Final_Project_Report.pdf) |
-| Demo video | *link* |
+| Demo video | [Watch on Google Drive](https://drive.google.com/file/d/1VXh8rzRxHOA21tu4lEKKEYOoKbRoDuBf/view?usp=sharing) |
 | Block diagram | [PDF](prototype/docs/System_Block_Diagram.pdf) · [SVG](prototype/docs/System_Block_Diagram.svg) |
 
 ## Team
